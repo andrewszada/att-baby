@@ -1,4 +1,5 @@
 import os 
+import validador  
 
 produtos = {
     1 : ["Graco Premier Modes Lux Stroller, Midtown™ Collection", "Graco", 2200, 10],
@@ -24,8 +25,7 @@ produtos = {
     21 : ["Três_meias","Puket", 20, 25],
     22 : ["Body","Puket", 50, 16],
     23 : ["Conjunto de pijama","Puket", 70, 14]
-}
-
+    }
 clientes = {}
 vendedores = {
     "premium": {"nome": "ANDRÉ BABY IMPORTS", "cargo": "Vendedor Premium", "vendas": "5000+ vendas"},
@@ -35,62 +35,183 @@ vendedores = {
 carrinho = []
 
 def limpar_tela():
-    os.system('cls' if os.name == 'nt' else 'clear')
+ os.system('cls' if os.name == 'nt' else 'clear')
+
+def menu_principal():
+    while True:
+        limpar_tela()
+        print("_______________________________________")
+        print("_______     Sistema de Gestão de Loja        _______")
+        print("_______________________________________")
+        print("____   1 - Módulo Cliente             _____")
+        print("_____  2 - Módulo Vendedor            _____")
+        print("_____  3 - Módulo Produto/Vendas      _____")
+        print("_____  4 - Módulo Caixa               _____")
+        print("_____  5 - Módulo Carrinho                   _____")
+        print("_____  5 - Módulo Administração                  _____")
+        print("_____  0 - Sair                       _____")
+        op_princ = input("##### Escolha sua opção: ")
+        return op_princ
+
+
 
 def modulo_cliente():
     limpar_tela()
     print("_______________________________________")
     print("_______           Módulo Cliente          _______")
-    print("_______________________________________")
+    print("_______________________________________")         
     print("____  1 - Cadastrar Cliente              _____")
     print("_____ 2 - Exibir Dados do Cliente       _____")
     print("_____ 3 - Alterar Dados do Cliente       _____")
     print("_____ 4 - Excluir Cliente               _____")
-    resp2 = input("##### Escolha sua opção: ")
+    print("_____ 0 - Sair              _____")
+    op_cliente = input("##### Escolha sua opção: ")
+    return op_cliente
     
-    if resp2 == "1":
-        nome = input("Qual seria o seu nome completo? ")
-        endereco = input("Qual o seu endereço completo? ")
-        telefone = input("Qual o seu número de telefone? ")
-        produtos_interesse = input("Qual seria os tipos de produto que seria de seu interesse? (Temos as opções de roupas, fraldas e brinquedos) ")
-        metodo_pagamento = input("Qual seria o método de pagamento desejado? ")
-        clientes[nome] = {
-            "endereco": endereco,
-            "telefone": telefone,
-            "produtos_interesse": produtos_interesse,
-            "metodo_pagamento": metodo_pagamento
-        }
-    elif resp2 == "2":
-        nome = input("Digite o nome do cliente: ")
-        if nome in clientes:
-            cliente = clientes[nome]
-            print("Nome:", nome)
-            print("Endereço:", cliente["endereco"])
-            print("Telefone:", cliente["telefone"])
-            print("Produtos de Interesse:", cliente["produtos_interesse"])
-            print("Método de Pagamento:", cliente["metodo_pagamento"])
-        else:
-            print("Cliente não encontrado.")
-        input("Pressione ENTER para continuar...")
-    elif resp2 == "3":
-        nome = input("Digite o nome do cliente: ")
-        if nome in clientes:
-            cliente = clientes[nome]
-            cliente["endereco"] = input("Edite seu endereço: ")
-            cliente["telefone"] = input("Edite seu telefone: ")
-            cliente["produtos_interesse"] = input("Edite sua preferência de produtos: ")
-            cliente["metodo_pagamento"] = input("Edite seu método de pagamento: ")
-        else:
-            print("Cliente não encontrado.")
-        input("Pressione ENTER para continuar...")
-    elif resp2 == "4":
-        nome = input("Digite o nome do cliente: ")
-        if nome in clientes:
-            del clientes[nome]
-            print("Cliente excluído com sucesso.")
-        else:
-            print("Cliente não encontrado.")
-        input("Pressione ENTER para continuar...")
+def cadastrar_cliente():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____        Cadastrar Cliente      _____")
+    print("____________________________________________")
+    print()
+    nome = input("Qual seria o seu nome completo? ")
+    while not validador.validar_nome(nome):
+        print("Nome inválido. Por favor, insira apenas letras e espaços.")
+        nome = input("Qual o seu nome ")
+    else:
+        print("Nome válido")
+    
+    email = input("Qual o seu e-mail: ")
+    while not validador.validar_email(email):
+        print("Email inválido. Por favor, digite um email válido.")
+        email = input("Qual o seu e-mail: ")
+    else:
+        print("E-mail válido")
+    
+    endereço = input("Qual o seu endereço completo? ")
+    while not validador.validar_endereço(endereço):
+        print("Endereço inválido. Por favor, insira apenas letras e espaços.")
+        endereço = input("Qual o seu endereço? ")
+    else:
+        print("Endereço válido")
+    
+    telefone = input("Qual o seu número de telefone? ")
+    while not validador.validar_telefone(telefone):
+        print("Telefone inválido. Por favor, insira seu número corretamente (Use o travessão para separar o números)")
+        telefone = input("Qual é o seu número de telefone? ")
+    else:
+        print("Número válido")
+    
+    produtos_interesse = input("Qual seriam os tipos de produto que seriam de seu interesse? (Temos as opções de roupas, fraldas e brinquedos) ")
+    metodo_pagamento = input("Qual seria o método de pagamento desejado? ")
+    
+    clientes[email] = {
+        "endereço": endereço,
+        "nome": nome,
+        "telefone": telefone,
+        "produtos_interesse": produtos_interesse,
+        "metodo_pagamento": metodo_pagamento
+    }
+
+def cadastrar_cliente():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____        Cadastrar Cliente      _____")
+    print("____________________________________________")
+    print()
+    nome = input("Qual seria o seu nome completo? ")
+    while not validador.validar_nome(nome):
+        print("Nome inválido. Por favor, insira apenas letras e espaços.")
+        nome = input("Qual o seu nome completo? ")
+    else:
+        print("Nome válido")
+    
+    email = input("Qual o seu e-mail: ")
+    while not validador.validar_email(email):
+        print("Email inválido. Por favor, digite um email válido.")
+        email = input("Qual o seu e-mail: ")
+    else:
+        print("E-mail válido")
+    
+    endereço = input("Qual o seu endereço completo? ")
+    while not validador.validar_endereço(endereço):
+        print("Endereço inválido. Por favor, insira apenas letras e espaços.")
+        endereço = input("Qual o seu endereço completo? ")
+    else:
+        print("Endereço válido")
+    
+    telefone = input("Qual o seu número de telefone? ")
+    while not validador.validar_telefone(telefone):
+        print("Telefone inválido. Por favor, insira seu número corretamente (Use o travessão para separar os números)")
+        telefone = input("Qual é o seu número de telefone? ")
+    else:
+        print("Número válido")
+    
+    produtos_interesse = input("Quais seriam os tipos de produto que seriam de seu interesse? (Temos as opções de roupas, fraldas e brinquedos) ")
+    metodo_pagamento = input("Qual seria o método de pagamento desejado? ")
+    
+    clientes[email] = {
+        "endereço": endereço,
+        "nome": nome,
+        "telefone": telefone,
+        "produtos_interesse": produtos_interesse,
+        "metodo_pagamento": metodo_pagamento
+    }
+
+def exibir_cliente():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____         Exibir Dados do Cliente      _____")
+    print("____________________________________________")
+    print()
+    email = input("Digite o email do cliente: ")
+    if email in clientes:
+        cliente = clientes[email]
+        print("Nome:", cliente["nome"])
+        print("Endereço:", cliente["endereço"])
+        print("Telefone:", cliente["telefone"])
+        print("Produtos de Interesse:", cliente["produtos_interesse"])
+        print("Método de Pagamento:", cliente["metodo_pagamento"])
+    else:
+        print("Cliente não encontrado.")
+    input("Pressione ENTER para continuar...")
+
+def alterar_cliente():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____        Alterar Dados do Cliente      _____")
+    print("____________________________________________")
+    print()
+    email = input("Digite o email do cliente: ")
+    if email in clientes:
+        cliente = clientes[email]
+        cliente["nome"] = input("Edite seu nome: ")
+        cliente["endereço"] = input("Edite seu endereço: ")
+        cliente["telefone"] = input("Edite seu telefone: ")
+        cliente["produtos_interesse"] = input("Edite sua preferência de produtos: ")
+        cliente["metodo_pagamento"] = input("Edite seu método de pagamento: ")
+    else:
+        print("Cliente não encontrado.")
+    input("Pressione ENTER para continuar...")
+
+def excluir_cliente():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____        Excluir Cliente      _____")
+    print("____________________________________________")
+    print()
+    email = input("Digite o email do cliente que deseja excluir: ")
+    if email in clientes:
+        del clientes[email]
+        print("Cliente excluído com sucesso.")
+    else:
+        print("Cliente não encontrado.")
+    input("Pressione ENTER para continuar...")
 
 def modulo_vendedor():
     limpar_tela()
@@ -99,27 +220,43 @@ def modulo_vendedor():
     print("_______________________________________")
     print("____   1 - Informações do Vendedor             _____")
     print("_____  2 - Informações do CEO      _____")
-    print("_____  3 - Gestão de Estoque      _____")
-    resp2 = input("##### Escolha sua opção: ")
+    print("_____  0 - Sair              _____")
+    op_vendedor = input("##### Escolha sua opção: ")
+    return op_vendedor
     
-    if resp2 == "1":
-        vendedor = vendedores["premium"]
-        print(vendedor["nome"])
-        print(vendedor["cargo"])
-        print(vendedor["vendas"])
-    elif resp2 == "2":
-        ceo = vendedores["ceo"]
-        print(ceo["nome"])
-        print(ceo["idade"])
-        print(ceo["descricao"])
+def info_vendedor():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____        Informações do Vendedor      _____")
+    print("____________________________________________")
+    print()
+    vendedor = vendedores["premium"]
+    print("Nome: " + vendedor["nome"])
+    print("Cargo: " + vendedor["cargo"])
+    print("Vendas: " + str(vendedor["vendas"]))
+
+def info_ceo():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____        Informações do CEO      _____")
+    print("____________________________________________")
+    print()
+    ceo = vendedores["ceo"]
+    print("Nome: " + ceo["nome"])
+    print("Idade: " + str(ceo["idade"]))
+    print("Descrição: " + ceo["descricao"])
     input("Pressione ENTER para continuar...")
 
+    
 def modulo_produto_vendas():
     limpar_tela()
     print("_______________________________________")
     print("_______           Módulo Produtos          _______")
     print("_______________________________________")
     print("____  1 - Ver Produtos           _____")
+    print("____  0 - Sair         _____")
     input("Temos produtos dos mais variados para sua criança: CARRINHOS, BRINQUEDOS, ROUPAS (Aperte ENTER)")
     print("Do 1 ao 6, marcas de carrinho, do 7 ao 15, marcas de brinquedo e do 16 ao 23, marcas de roupa")
     id_produto = int(input("Qual é o ID de verificação do produto desejado? "))
@@ -144,37 +281,50 @@ def modulo_caixa():
     print("_______________________________________")
     print("____  1 - Controle de Estoque             _____")
     print("____  2 - Comprar produtos            _____")
+    print("_____ 0 - Sair                      _____")
 
 
-    resp2 = input("##### Escolha sua opção: ")
+    op_caixa = input("##### Escolha sua opção: ")
+    return op_caixa
     
-    if resp2 == "1":
-        print("Para verificação de estoque, você irá chamar um conjunto de números que até uma sequência específica ele irá demonstrar uma modalidade de produto")
-        print("Do 1 ao 6, marcas de carrinho, do 7 ao 15, marcas de brinquedo e do 16 ao 23, marcas de roupa")
-        id_produto = int(input("Qual é o ID de verificação de estoque desejado? "))
-        if id_produto in produtos:
-            produto = produtos[id_produto]
-            print("Informações do Produto:")
-            print("Nome:", produto[0])
-            print("Marca:", produto[1])
-            print("Preço unitário:", produto[2])
-            print("Quantidade disponível em estoque:", produto[3])
-        else:
-            print("Produto não encontrado.")
+def caixa_estoque():
+    limpar_tela()
+    print()
+    print("____________________________________________")
+    print("_____       Controle de Estoque      _____ ")
+    print("____________________________________________")
+    print()
+    print("Para verificação de estoque, você irá chamar um conjunto de números que até uma sequência específica ele irá demonstrar uma modalidade de produto")
+    print("Do 1 ao 6, marcas de carrinho, do 7 ao 15, marcas de brinquedo e do 16 ao 23, marcas de roupa")
+    id_produto = int(input("Qual é o ID de verificação de estoque desejado? "))
+    if id_produto in produtos:
+        produto = produtos[id_produto]
+        print("Informações do Produto:")
+        print("Nome:", produto[0])
+        print("Marca:", produto[1])
+        print("Preço unitário:", produto[2])
+        print("Quantidade disponível em estoque:", produto[3])
+    else:
+        print("Produto não encontrado.")
     input("Pressione ENTER para continuar...")
 
-    if resp2 == "2":
-        print("Para escolha do produto específico do estoque, você irá chamar um conjunto de números que até uma sequência específica ele irá demonstrar uma modalidade de produto")
-        print("Do 1 ao 6, marcas de carrinho, do 7 ao 15, marcas de brinquedo e do 16 ao 23, marcas de roupa")
-        id_produto = int(input("Qual é o ID de verificação de estoque desejado? "))
+def caixa_comprar():
+    print()
+    print("____________________________________________")
+    print("_____        Comprar produtos     _____ ")
+    print("____________________________________________")
+    print()
+    print("Para escolha do produto específico do estoque, você irá chamar um conjunto de números que até uma sequência específica ele irá demonstrar uma modalidade de produto")
+    print("Do 1 ao 6, marcas de carrinho, do 7 ao 15, marcas de brinquedo e do 16 ao 23, marcas de roupa")
+    id_produto = int(input("Qual é o ID de verificação de estoque desejado? "))
 
-        if id_produto in produtos:
-            produto = produtos[id_produto]
-            quantidade = int(input(f"Você deseja adicionar quantas unidades do produto {produto[0]}? "))
-            quantidade += produto[3]  # Supondo que o índice 3 é a quantidade em estoque
-            aviso = input(f"Foram adicionadas {quantidade} unidades do produto {produto[0]} ao seu estoque.")
-        else:
-            print("ID de produto não encontrado no estoque.")
+    if id_produto in produtos:
+        produto = produtos[id_produto]
+        quantidade = int(input(f"Você deseja adicionar quantas unidades do produto {produto[0]}? "))
+        quantidade += produto[1][3]  # Supondo que o índice 3 é a quantidade em estoque
+        aviso = input(f"Foram adicionadas {quantidade} unidades do produto {produto[0]} ao seu estoque.")
+    else:
+        print("ID de produto não encontrado no estoque.")
 
 
 
@@ -192,33 +342,49 @@ def modulo_carrinho():
         print("Compra não finalizada.")
     input("Pressione ENTER para continuar...")
 
-def menu_principal():
-    while True:
-        limpar_tela()
-        print("_______________________________________")
-        print("_______     Sistema de Gestão de Loja        _______")
-        print("_______________________________________")
-        print("____   1 - Módulo Cliente             _____")
-        print("_____  2 - Módulo Vendedor            _____")
-        print("_____  3 - Módulo Produto/Vendas      _____")
-        print("_____  4 - Módulo Caixa               _____")
-        print("_____  5 - Módulo Carrinho                   _____")
-        print("_____  5 - Módulo Administração                  _____")
-        print("_____  0 - Sair                       _____")
-        resp = input("##### Escolha sua opção: ")
         
-        if resp == "1":
-            modulo_cliente()
-        elif resp == "2":
-            modulo_vendedor()
-        elif resp == "3":
-            modulo_produto_vendas()
-        elif resp == "4":
-            modulo_caixa()
-        elif resp == "5":
-            modulo_carrinho()
-        elif resp == "0":
-            break
+op_princ = ''
+while op_princ != '0':
+  op_princ = menu_principal()
+
+  if op_princ == '1':
+    op_cliente = ''
+    while op_cliente != '0':
+      op_cliente = modulo_cliente()
+      print()
+      if op_cliente == '1':
+          cadastrar_cliente()
+      elif op_cliente == '2':
+          exibir_cliente()
+      elif op_cliente == '3':
+          alterar_cliente()
+      elif op_cliente == '4':
+          excluir_cliente()
+  elif op_princ == '2':
+      op_vendedor == ''
+      while op_vendedor != '0':
+          op_vendedor = modulo_vendedor()
+          print()
+          if op_vendedor == '1':
+              info_vendedor()
+          elif op_vendedor == '2':
+              info_ceo()
+  elif op_princ == '3':
+      op_vendedor = ''
+      while op_vendedor != '0':
+       op_vendedor = modulo_produto_vendas()
+       print()
+       if op_vendedor == ('1'):
+           modulo_produto_vendas()
+  elif op_princ == '4':
+      op_caixa = ''
+      while op_caixa != '0':
+          op_caixa = modulo_caixa
+          print()
+          if op_caixa == '1':
+              caixa_estoque()
+          elif op_caixa == '2':
+              caixa_comprar()
 
 if __name__ == "__main__":
     menu_principal()
