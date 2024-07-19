@@ -1,5 +1,7 @@
 import os 
 import validador  
+import pickle
+
 
 produtos = {
     1 : ["Graco Premier Modes Lux Stroller, Midtown™ Collection", "Graco", 2200, 10],
@@ -27,6 +29,13 @@ produtos = {
     23 : ["Conjunto de pijama","Puket", 70, 14]
     }
 clientes = {}
+try:
+  arq_clientes = open("clientes.dat", "rb")
+  clientes = pickle.load(arq_clientes)
+except:
+  arq_clientes = open("clientes.dat", "wb")
+  arq_clientes.close()
+
 vendedores = {
     "premium": {"nome": "ANDRÉ BABY IMPORTS", "cargo": "Vendedor Premium", "vendas": "5000+ vendas"},
     "ceo": {"nome": "André Leandro de Medeiros Araújo", "idade": 33, "descricao": "Com mestrado em administração e gestão de negócios, atua no mercado de produtos infantis há 10 anos."}
@@ -106,59 +115,10 @@ def cadastrar_cliente():
     produtos_interesse = input("Qual seriam os tipos de produto que seriam de seu interesse? (Temos as opções de roupas, fraldas e brinquedos) ")
     metodo_pagamento = input("Qual seria o método de pagamento desejado? ")
     
-    clientes[email] = {
-        "endereço": endereço,
-        "nome": nome,
-        "telefone": telefone,
-        "produtos_interesse": produtos_interesse,
-        "metodo_pagamento": metodo_pagamento
-    }
+    clientes[email] = [nome, endereço, telefone, produtos_interesse, metodo_pagamento]
+    print(clientes)
+        
 
-def cadastrar_cliente():
-    limpar_tela()
-    print()
-    print("____________________________________________")
-    print("_____        Cadastrar Cliente      _____")
-    print("____________________________________________")
-    print()
-    nome = input("Qual seria o seu nome completo? ")
-    while not validador.validar_nome(nome):
-        print("Nome inválido. Por favor, insira apenas letras e espaços.")
-        nome = input("Qual o seu nome completo? ")
-    else:
-        print("Nome válido")
-    
-    email = input("Qual o seu e-mail: ")
-    while not validador.validar_email(email):
-        print("Email inválido. Por favor, digite um email válido.")
-        email = input("Qual o seu e-mail: ")
-    else:
-        print("E-mail válido")
-    
-    endereço = input("Qual o seu endereço completo? ")
-    while not validador.validar_endereço(endereço):
-        print("Endereço inválido. Por favor, insira apenas letras e espaços.")
-        endereço = input("Qual o seu endereço completo? ")
-    else:
-        print("Endereço válido")
-    
-    telefone = input("Qual o seu número de telefone? ")
-    while not validador.validar_telefone(telefone):
-        print("Telefone inválido. Por favor, insira seu número corretamente (Use o travessão para separar os números)")
-        telefone = input("Qual é o seu número de telefone? ")
-    else:
-        print("Número válido")
-    
-    produtos_interesse = input("Quais seriam os tipos de produto que seriam de seu interesse? (Temos as opções de roupas, fraldas e brinquedos) ")
-    metodo_pagamento = input("Qual seria o método de pagamento desejado? ")
-    
-    clientes[email] = {
-        "endereço": endereço,
-        "nome": nome,
-        "telefone": telefone,
-        "produtos_interesse": produtos_interesse,
-        "metodo_pagamento": metodo_pagamento
-    }
 
 def exibir_cliente():
     limpar_tela()
@@ -169,12 +129,11 @@ def exibir_cliente():
     print()
     email = input("Digite o email do cliente: ")
     if email in clientes:
-        cliente = clientes[email]
-        print("Nome:", cliente["nome"])
-        print("Endereço:", cliente["endereço"])
-        print("Telefone:", cliente["telefone"])
-        print("Produtos de Interesse:", cliente["produtos_interesse"])
-        print("Método de Pagamento:", cliente["metodo_pagamento"])
+        print("Nome:", clientes[email][0])
+        print("Endereço:", clientes[email][1])
+        print("Telefone:", clientes[email][2])
+        print("Produtos de Interesse:", clientes[email][3])
+        print("Método de Pagamento:", clientes[email][4])
     else:
         print("Cliente não encontrado.")
     input("Pressione ENTER para continuar...")
@@ -188,12 +147,40 @@ def alterar_cliente():
     print()
     email = input("Digite o email do cliente: ")
     if email in clientes:
-        cliente = clientes[email]
-        cliente["nome"] = input("Edite seu nome: ")
-        cliente["endereço"] = input("Edite seu endereço: ")
-        cliente["telefone"] = input("Edite seu telefone: ")
-        cliente["produtos_interesse"] = input("Edite sua preferência de produtos: ")
-        cliente["metodo_pagamento"] = input("Edite seu método de pagamento: ")
+        print("Informe os novos dados do(a) cliente: ")
+        nome = input("Nome: ")
+        while not validador.validar_nome(nome):
+            print("Nome inválido. Por favor, insira apenas letras e espaços.")
+            nome = input("Qual o seu nome ")
+        else:
+            print("Nome válido")
+        print()
+        endereço = input("Endereço: ")
+        while not validador.validar_endereço(endereço):
+            print("Endereço inválido. Por favor, insira apenas letras e espaços.")
+            endereço = input("Qual o seu endereço? ")
+        else:
+            print("Endereço válido")
+        print()
+        email = input(" Email: ")
+        while not validador.validar_email(email):
+            print("Email inválido. Por favor, digite um email válido.")
+            email = input("Qual o seu e-mail: ")
+        else:
+            print("E-mail válido")
+        print()
+        telefone = input("Celular: ")
+        while not validador.validar_telefone(telefone):
+            print("Telefone inválido. Por favor, insira seu número corretamente (Use o travessão para separar o números)")
+            telefone = input("Qual é o seu número de telefone? ")
+        else:
+            print("Telefone válido")
+        print()
+        produtos_interesse = input("Produtos de interesse: ")
+        print()
+        metodo_pagamento = input("Metodo de pagamento: ")
+        clientes[email] = [nome, endereço, telefone, produtos_interesse, metodo_pagamento]
+        print("Aluno(a) alterado(a) com sucesso!")
     else:
         print("Cliente não encontrado.")
     input("Pressione ENTER para continuar...")
@@ -385,6 +372,11 @@ while op_princ != '0':
               caixa_estoque()
           elif op_caixa == '2':
               caixa_comprar()
+
+
+arq_clientes = open("clientes.dat", "wb")
+pickle.dump(clientes, arq_clientes)
+arq_clientes.close()
 
 if __name__ == "__main__":
     menu_principal()
